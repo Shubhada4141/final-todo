@@ -46,6 +46,16 @@ pipeline {
                 sh 'docker push shubhadashingane/final_todo_last:latest'
             }
         }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    docker stop final-todo || true
+                    docker rm final-todo || true
+                    docker pull shubhadashingane/final_todo_last:latest
+                    docker run -d --name final-todo -p 8080:8080 shubhadashingane/final_todo_last:latest
+                '''
+            }
+        }
     }
 }
-
