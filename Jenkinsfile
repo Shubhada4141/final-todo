@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -24,7 +25,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t shubhadashingane/final_todo_last .'
+                sh 'docker build -t shubhadashingane/final_todo_last:latest .'
             }
         }
 
@@ -35,15 +36,16 @@ pipeline {
                     usernameVariable: 'DOCKER_USERNAME',
                     passwordVariable: 'DOCKER_PASSWORD'
                 )]) {
-                    sh 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
                 }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                sh 'docker push shubhadashingane/final_todo_last '
+                sh 'docker push shubhadashingane/final_todo_last:latest'
             }
         }
     }
 }
+```
